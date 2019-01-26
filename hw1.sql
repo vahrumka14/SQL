@@ -1,19 +1,19 @@
 SELECT ('ФИО: Мироненко Елена Борисовна');
 
-su - postgres
-psql
+--su - postgres
+--psql
 
 
 -- создание таблицы films
 
 
-Табличка films:
+--Табличка films:
 
-title - название (текст)
-id (число) соответствует film_id в табличке persons2content
-country страна (тест)
-box_office сборы в долларах (число)
-release_year год выпуска (timestamp)
+--title - название (текст)
+--id (число) соответствует film_id в табличке persons2content
+--country страна (тест)
+--box_office сборы в долларах (число)
+--release_year год выпуска (timestamp)
 
 
 CREATE TABLE films 
@@ -35,10 +35,10 @@ INSERT INTO films VALUES ('Он и Она', 5, 'Франция, Бельгия',
 
 -- создание таблицы persons
 
-Табличка persons
+--Табличка persons
 
-id (число) - соответствует person_id в табличке persons2content
-fio (текст) фамилия, имя
+--id (число) - соответствует person_id в табличке persons2content
+--fio (текст) фамилия, имя
 
 CREATE TABLE persons
 (
@@ -59,10 +59,10 @@ INSERT INTO persons VALUES (8, 'Николя Бедос');
 
 -- создание таблицы persons2content
 
-Табличка persons2content
-- person_id (число) - id персоны
-- film_id (число) - id контента
-- person_type (текст) тип персоны (актёр, режиссёр и т.д.)
+--Табличка persons2content
+--- person_id (число) - id персоны
+--- film_id (число) - id контента
+--- person_type (текст) тип персоны (актёр, режиссёр и т.д.)
 
 CREATE TABLE persons2content
 (
