@@ -4,12 +4,14 @@ SELECT ('ФИО: Мироненко Елена Борисовна');
 
 --1. Используя редактор сайта https://www.db-fiddle.com создать схему базы данных (создать таблицы и заполнить их). Использовать синтаксис PostgreSQL 10.
 
+DROP TABLE IF EXISTS Department CASCADE;
 CREATE TABLE Department
 (
 id int primary key,
 name varchar(250)
 );
 
+DROP TABLE IF EXISTS Employee CASCADE;
 CREATE TABLE Employee
 (
 id int primary key,
@@ -76,7 +78,8 @@ inner join
 from Employee as e
 group by e.department_id
 having count (distinct e.id) >= 3 ) as a
-on a.department_id = d.id;
+on a.department_id = d.id
+order by a.count_employee desc;
 
 --c) Вывести список департаментов с максимальным количеством публикаций  (id и название департамента, количество публикаций)
 
@@ -151,4 +154,7 @@ group by d.id
 order by avg_num_public desc;
 
 --3. Полученные результаты из пункта 2 (набор запросов), сохранить в файл формата .sql и отправить координатору.
+
+--su - postgres
+--psql -U postgres -f /home/lena/Netology/SQL/Homework_SQL/Laba.sql
 
