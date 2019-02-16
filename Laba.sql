@@ -61,6 +61,7 @@ left join
 from Employee as e
 group by e.department_id) as a
 on a.department_id = d.id
+order by d.name;
 
 --2) Вывести список департаментов, в которых работают 3 и более сотрудников (id и название департамента, количество сотрудников)
 
@@ -71,7 +72,7 @@ inner join
 from Employee as e
 group by e.department_id
 having count (distinct e.id) >= 3 ) as a
-on a.department_id = d.id
+on a.department_id = d.id;
 
 --3) Вывести список департаментов с максимальным количеством публикаций  (id и название департамента, количество публикаций)
 
