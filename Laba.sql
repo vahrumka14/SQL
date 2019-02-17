@@ -56,7 +56,7 @@ insert into Employee values
 
 --a) Вывести список названий департаментов и количество главных врачей в каждом из этих департаментов
 
---2. Добавляем к таблице Department кол-во главных врачей, так как нам нужно вывести имя каждого департамента 
+--2. Добавляем к таблице Department кол-во главных врачей, так как нам нужно вывести название каждого департамента 
 select d.name, a.count_chief_doc
 from Department as d
 left join
@@ -108,32 +108,44 @@ limit 1);
 
 --d) Вывести список сотрудников с минимальным количеством публикаций в своем департаменте (id и название департамента, имя сотрудника, количество публикаций)
 
+
 with temp_table
 as(
---2. Находим минимальное кол-во публикаций для каждого департамента
-select department_id, min(sum_num_public) as min_num_public
-from 
-(
---1. Находим суммарное кол-во публикаций для каждого департамента и сотрудника. Так как теоретически могут быть дубли по одному департаменту и сотруднику
-select e.department_id, e.name, sum(num_public) as sum_num_public
-from Employee as e
-group by e.department_id, e.name) as a
+--1. Выбираем минимальное кол-во публикаций для каждого департамента
+select department_id, min(num_public) as min_num_public
+from Employee
 group by department_id
 )
-select id, name, name_employee, sum_num_public
+select id, name, name_employee, num_public_min
 from
 (
---3. Находим суммарное кол-во публикаций для каждого департамента и сотрудника, так как теоретически могут быть дубли по одному департаменту и сотруднику
-select d.*, e.name as name_employee, sum(e.num_public) as sum_num_public
+--2. Находим минимальное кол-во публикаций для каждого департамента и сотрудника
+select d.*, e.id as id_name, e.name as name_employee, min(e.num_public) as num_public_min
 from Employee as e
 inner join Department as d
 on d.id = e.department_id
-group by d.id, e.name
+group by d.id, e.id
 ) as h
---4. Оставляем только те записи, в которых суммарное значение публикаций по сотруднику и департаменту равно минимальному значению публикаций по департаменту
+--3. Оставляем только те записи, в которых суммарное значение публикаций по сотруднику и департаменту равно минимальному значению публикаций по департаменту
 inner join temp_table as t
-on h.id = t.department_id and h.sum_num_public=t.min_num_public
+on h.id = t.department_id and h.num_public_min=t.min_num_public
 order by id, name;
+
+------------------
+
+-- Тот же запрос только с использованием оконной функции min
+
+select d.id, d.name, b.name as name_employee, b. num_public as num_public_min
+from 
+(select a.*
+from
+(select e.id, e.name, e.department_id, e.num_public, 
+min(num_public) OVER (partition by  e.department_id) as min_num_public
+from Employee as e) as a
+where num_public = min_num_public) as b
+inner join Department as d
+on d.id = b.department_id;
+
 
 --e) Вывести список департаментов и среднее количество публикаций для тех департаментов, в которых работает более одного главного врача (id и название департамента, среднее количество публикаций)
 
